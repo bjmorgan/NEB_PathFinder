@@ -61,12 +61,12 @@ class NEBPathfinder:
             start_f = images[0].sites[site_i].frac_coords
             end_f = images[-1].sites[site_i].frac_coords
 
-            path = NEBPathfinder.string_relax(NEBPathfinder.__f2d(start_f, self.__v),
-                                              NEBPathfinder.__f2d(end_f, self.__v),
-                                              self.__v, n_images=(self.__n_images+1),
-                                                                    dr=[self.__s1.lattice.a/self.__v.shape[0],
-                                                                        self.__s1.lattice.b/self.__v.shape[1],
-                                                                        self.__s1.lattice.c/self.__v.shape[2]])
+            path = self.string_relax(NEBPathfinder.__f2d(start_f, self.__v),
+                                     NEBPathfinder.__f2d(end_f, self.__v),
+                                     self.__v, n_images=(self.__n_images+1),
+                                     dr=[self.__s1.lattice.a/self.__v.shape[0],
+                                     self.__s1.lattice.b/self.__v.shape[1],
+                                     self.__s1.lattice.c/self.__v.shape[2]])
             for image_i, image in enumerate(images):
                 image.translate_sites(site_i,
                                       NEBPathfinder.__d2f(path[image_i], self.__v) - image.sites[site_i].frac_coords,
@@ -94,8 +94,7 @@ class NEBPathfinder:
         p = Poscar(sum_struct)
         p.write_file(outfile)
 
-    @staticmethod
-    def string_relax(start, end, V, n_images=25, dr=None, h=3.0, k=0.17, min_iter=100, max_iter=10000, max_tol=5e-6):
+    def string_relax(self, start, end, V, n_images=25, dr=None, h=1.0, k=0.01, min_iter=100, max_iter=20000, max_tol=5e-6):
         """
         Implements path relaxation via the elastic band method. In general, the method is to define a path by a set of
         points (images) connected with bands with some elasticity constant k. The images then relax along the forces
@@ -343,7 +342,6 @@ class FreeVolumePotential(StaticPotential):
                     gauss_dist[int(a_d)][int(b_d)][int(c_d)] = d_f / r
         v = scipy.stats.norm.pdf(gauss_dist)
         return v
-
 
 class MixedPotential(StaticPotential):
     '''
