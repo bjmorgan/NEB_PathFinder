@@ -15,8 +15,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-s1', type=str, help='starting point CONTCAR')
     parser.add_argument('-s2', type=str, help='ending point CONTCAR')
-    parser.add_argument('-e', type=str, help='diffusing cation')
-    parser.add_argument('-n', type=int, default=8, help='number of interpolated images')
+    parser.add_argument('-e',  type=int, help='index of diffusing cation (VASP 1 counting)')
+    parser.add_argument('-n',  type=int, default=8, help='number of interpolated images')
     parser.add_argument('-chg', type=str, help='CHGCAR for pathFinder')
     arg = parser.parse_args()
 
@@ -24,10 +24,11 @@ if __name__ == '__main__':
     s2 = Poscar.from_file(arg.s2).structure
     chg = Chgcar.from_file(arg.chg)
 
-    relax_sites = []
-    for i, site in enumerate(s1.sites):
-        if site.specie == Element(arg.e):
-            relax_sites.append(i)
+    relax_sites = [ arg.e - 1 ]
+    #for i, site in enumerate(s1.sites):
+    #    print( site.specie )
+    #    if site.specie == Element(arg.e):
+    #        relax_sites.append(i)
 
     pf = NEBPathfinder(s1, s2, relax_sites=relax_sites, v=ChgcarPotential(chg).get_v(), n_images=(3*arg.n))
 
