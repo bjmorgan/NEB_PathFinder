@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import argparse
 from pymatgen import Element
-from pymatgen.io.vaspio import Poscar, Chgcar
+from pymatgen.io.vasp.outputs import Poscar, Chgcar
 import os
 
 __author__ = 'Shaun Rong'
@@ -9,7 +9,7 @@ __version__ = '0.1'
 __maintainer__ = 'Shaun Rong'
 __email__ = 'rongzq08@gmail.com'
 
-from PathFinder.pathFinder import NEBPathfinder, ChgcarPotential
+from pathfinder.pathfinder import NEBPathfinder, ChgcarPotential
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
